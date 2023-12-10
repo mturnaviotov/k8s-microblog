@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: microblog-app
+spec:
+  containers:
+    - name: microblog
+      image: mb:v1
+      ports:
+        - containerPort: 3000
+      env:
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: microblog-key-base
+              key:  secret
+      resources:
+        limits:
+          memory: 250Mi
+        requests:
+          cpu: 100m
+          memory: 200Mi
+      livenessProbe:
+        httpGet:
+          path: /up
+          port: 3000
+        initialDelaySeconds: 3
+        periodSeconds: 3
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microblog-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microblog-app
+  template:
+    metadata:
+      labels:
+        app: microblog-app
+    spec:
+      containers:
+      - name: microblog
+        image: mb:v1
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microblog-service
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: microblog-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      nodePort: 32000
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: microblog-configmap
+data:
+  # property-like keys; each key maps to a simple value
+  ENV_VAR_HERE: "value"
+
+
+## generate: echo "random string here" | base64
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: microblog-key-base
+type: Opaque
+data:
+  secret: U0E5TFJFVE53YVRld1B0eUpZUUp6NGVhS1FidzFIVFZIdHJnYzBoWGJnSTNTc2NmbXFtYTgzTWYzZ3JCNEJ4cg==
