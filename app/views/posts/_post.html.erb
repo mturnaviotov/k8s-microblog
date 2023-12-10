@@ -1,0 +1,8 @@
+<div id="<%= dom_id post %>">
+  <aside>
+    <%= post.user.name %> @ <%= post.created_at %>
+    <%= link_to "Show/Edit", post %>
+  </aside>
+    <h3><%= post.topic %></h3>
+    <%= post.text %>
+</div>

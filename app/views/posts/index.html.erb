@@ -1,0 +1,9 @@
+<p style="color: green"><%= notice %></p>
+
+<h2>Posts</h3>
+<div id="posts">
+  <% @posts.each do |post| %>
+    <%= render post %>
+  <% end %>
+</div>
+

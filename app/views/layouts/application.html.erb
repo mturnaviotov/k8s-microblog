@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mb</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Minified version -->
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header>
+    <nav>
+    <ul>
+        <% if !user_signed_in? %>
+    	    <li><a href=<%= route_for('new_user_registration') %>>Sign Up</a></li>
+	    <li><a href=<%= route_for('new_user_session') %>>Sign In</a></li>
+	<% else %>
+	    <li>Welcome, <%= current_user.name %></li>
+	    <li><%= link_to "New post", new_post_path %></li>
+	    <li><a href=<%= route_for('edit_user_registration') %>> Edit Profile</a></li>
+	    <li><%= button_to "Sign Out", route_for('destroy_user_session'), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></li>
+	<% end %>
+    </ul>
+    </nav>
+    </header>
+<%= yield %>
+</body>
+</html>
