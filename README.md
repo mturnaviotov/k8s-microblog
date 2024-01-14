@@ -7,7 +7,7 @@ This is a small Ruby on Rails 7 blog app with SQLite for k8s testing purposes
 sudo docker build . -t mb:v1
 
 key=$(head -c 100 /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9~!@#$%^&*_-' | fold -w 24 | head -n 1)
-docker run -d --env SECRET_KEY_BASE=$key mb:v1
+docker run -d -p 3000:3000 --env SECRET_KEY_BASE=$key mb:v1
 ```
 
 ### K8S
